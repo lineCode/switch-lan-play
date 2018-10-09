@@ -5,10 +5,10 @@
     "main": "server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node dist/udpserver.js",
+        "start": "node dist/index.js",
         "dev": "tsc -w -p .",
         "build": "tsc -p .",
-        "server": "node dist/udpserver.js"
+        "server": "node dist/index.js"
     },
     "author": "spacemeowx2",
     "license": "MIT",

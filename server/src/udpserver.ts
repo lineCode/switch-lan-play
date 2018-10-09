@@ -1,6 +1,4 @@
-import { ServerMonitor } from './monitor'
 import { createSocket, Socket, AddressInfo } from 'dgram'
-import { SLPServer } from './slp-server'
 type IPAddr = string
 const Timeout = 30 * 1000
 const IPV4_OFF_SRC = 12
@@ -139,16 +137,3 @@ export class SLPUDPServer {
     clearCacheItem(this.ipCache)
   }
 }
-
-function main (argv: string[]) {
-  let port = argv[0]
-  if (port === undefined) {
-    port = '11451'
-  }
-  const portNum = parseInt(port)
-  let udp = new SLPUDPServer(portNum)
-  let slpServer = new SLPServer()
-  let monitor = new ServerMonitor(udp, slpServer)
-  monitor.start(portNum)
-}
-main(process.argv.slice(2))
