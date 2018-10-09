@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import Router, { IRouterContext } from 'koa-router'
-import { SLPServer } from './udpserver'
+import { SLPUDPServer } from './udpserver'
+import { SLPServer } from './slp-server'
 import { join } from 'path'
 const pkg = require(join(__dirname, '..', 'package.json'))
 
@@ -8,7 +9,7 @@ export class ServerMonitor {
   private router = new Router()
   private app = new Koa()
 
-  constructor(private server: SLPServer) {
+  constructor(private server: SLPUDPServer, slpServer: SLPServer) {
     this.router.all('*', async (ctx, next) => {
       try {
         await next()
@@ -21,6 +22,7 @@ export class ServerMonitor {
         }
       }
     })
+    this.router.use('/service', slpServer.upgrade())
     this.router.get('/info', async ctx => this.handleGetInfo(ctx))
   }
 

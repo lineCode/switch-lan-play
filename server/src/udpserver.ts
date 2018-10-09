@@ -1,5 +1,6 @@
 import { ServerMonitor } from './monitor'
 import { createSocket, Socket, AddressInfo } from 'dgram'
+import { SLPServer } from './slp-server'
 type IPAddr = string
 const Timeout = 30 * 1000
 const IPV4_OFF_SRC = 12
@@ -32,7 +33,7 @@ function lookup (hostname: string, options: any, callback: (err: Error, address:
   callback(null, hostname, 4)
 }
 
-export class SLPServer {
+export class SLPUDPServer {
   server: Socket
   clients: Map<string, CacheItem> = new Map()
   ipCache: Map<number, CacheItem> = new Map()
@@ -145,8 +146,9 @@ function main (argv: string[]) {
     port = '11451'
   }
   const portNum = parseInt(port)
-  let s = new SLPServer(portNum)
-  let monitor = new ServerMonitor(s)
+  let udp = new SLPUDPServer(portNum)
+  let slpServer = new SLPServer()
+  let monitor = new ServerMonitor(udp, slpServer)
   monitor.start(portNum)
 }
 main(process.argv.slice(2))
